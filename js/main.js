@@ -4,13 +4,91 @@ var formatMoney = function(number) {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(number)
 }
 
+var movementByDateDesc = function(a, b) {
+    return b.date - a.date;
+}
+
+function MockedService() {
+
+    var _movements = [{
+            date: new Date(2017, 01, 05, 10, 30, 0, 0),
+            description: "Got money!",
+            amount: 100
+        },
+        {
+            date: new Date(2017, 01, 05, 10, 45, 0, 0),
+            description: "Bought stuff",
+            amount: -5
+        },
+        {
+            date: new Date(2017, 01, 05, 10, 50, 0, 0),
+            description: "Bought other stuff",
+            amount: -5
+        },
+        {
+            date: new Date(2017, 01, 05, 11, 0, 0, 0),
+            description: "Bought some more stuff",
+            amount: -10
+        },
+        {
+            date: new Date(2017, 01, 04, 10, 0, 0, 0),
+            description: "I'm out of money but I buy stuff",
+            amount: -10
+        },
+        {
+            date: new Date(2017, 01, 04, 15, 0, 0, 0),
+            description: "Need some more money to buy stuff",
+            amount: -10
+        }
+    ];
+
+    this.loadLatestMovements = function(num) {
+        var latest = [];
+        _movements.sort(movementByDateDesc);
+        for (var i = 0; i < num && i < _movements.length; i++) {
+            latest.push(_movements[i]);
+        }
+        return latest;
+    }
+
+    this.getCurrentAmount = function() {
+        var sum = 0;
+        for (var i = 0; i < _movements.length; i++) {
+            sum = sum + _movements[i].amount;
+        }
+        return sum;
+    }
+
+    this.getCurrentExpenses = function() {
+        var exps = 0;
+        for (var i = 0; i < _movements.length; i++) {
+            if (_movements[i].amount < 0) {
+                exps = exps + _movements[i].amount;
+            }
+        }
+        return exps;
+    }
+
+    this.getCurrentIncomes = function() {
+        var incs = 0;
+        for (var i = 0; i < _movements.length; i++) {
+            if (_movements[i].amount >= 0) {
+                incs = incs + _movements[i].amount;
+            }
+        }
+        return incs;
+    }
+}
+
 function Application(appConfig) {
 
     var latestMovements = [];
     var _appConfig = appConfig;
+    var _service = new MockedService();
+    var _lastMovementNumber = 5;
 
     function setupLatestMovements() {
-        latestMovements = loadLatestMovements()
+        latestMovements = _service.loadLatestMovements(_lastMovementNumber);
         latestMovements.sort(movementByDateDesc);
         latestMovements.forEach(function(value) {
             var row = _appConfig.latestMovementsTbl.tBodies[0].insertRow();
@@ -23,59 +101,19 @@ function Application(appConfig) {
         });
     }
 
-    function movementByDateDesc(a, b) {
-        return a - b;
-    }
-
-    function loadLatestMovements() {
-        return [{
-                date: new Date(2017, 01, 05, 10, 30, 0, 0),
-                description: "Got money!",
-                amount: 100
-            },
-            {
-                date: new Date(2017, 01, 05, 10, 45, 0, 0),
-                description: "Bought stuff",
-                amount: 5
-            },
-            {
-                date: new Date(2017, 01, 05, 10, 50, 0, 0),
-                description: "Bought other stuff",
-                amount: 5
-            },
-            {
-                date: new Date(2017, 01, 05, 11, 0, 0, 0),
-                description: "Bought some more stuff",
-                amount: 10
-            }
-        ];
-    }
-
     function setupCurrentAmount() {
-        var currentAmount = getCurrentAmount();
+        var currentAmount = _service.getCurrentAmount();
         _appConfig.currentAmountTxt.innerHTML = formatMoney(currentAmount);
     }
 
-    function getCurrentAmount() {
-        return 80.00;
-    }
-
     function setupCurrentExpenses() {
-        var currentExpenses = getCurrentExpenses();
+        var currentExpenses = _service.getCurrentExpenses();
         _appConfig.currentExpensesTxt.innerHTML = formatMoney(currentExpenses);
     }
 
-    function getCurrentExpenses() {
-        return -20.00;
-    }
-
     function setupCurrentIncomes() {
-        var currentIncomes = getCurrentIncomes();
+        var currentIncomes = _service.getCurrentIncomes();
         _appConfig.currentIncomesTxt.innerHTML = formatMoney(currentIncomes);
-    }
-
-    function getCurrentIncomes() {
-        return 100.00;
     }
 
     this.setup = function() {
