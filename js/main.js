@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", domLoaded);
 
+var formatMoney = function(number) {
+    return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(number)
+}
+
 function Application(appConfig) {
 
     var latestMovements = [];
@@ -15,7 +19,7 @@ function Application(appConfig) {
             var c3 = row.insertCell(2);
             c1.innerHTML = value.date;
             c2.innerHTML = value.description;
-            c3.innerHTML = value.amount;
+            c3.innerHTML = formatMoney(value.amount);
         });
     }
 
@@ -27,51 +31,51 @@ function Application(appConfig) {
         return [{
                 date: new Date(2017, 01, 05, 10, 30, 0, 0),
                 description: "Got money!",
-                amount: "100,00"
+                amount: 100
             },
             {
                 date: new Date(2017, 01, 05, 10, 45, 0, 0),
                 description: "Bought stuff",
-                amount: "5,00"
+                amount: 5
             },
             {
                 date: new Date(2017, 01, 05, 10, 50, 0, 0),
                 description: "Bought other stuff",
-                amount: "5,00"
+                amount: 5
             },
             {
                 date: new Date(2017, 01, 05, 11, 0, 0, 0),
                 description: "Bought some more stuff",
-                amount: "10,00"
+                amount: 10
             }
         ];
     }
 
     function setupCurrentAmount() {
         var currentAmount = getCurrentAmount();
-        _appConfig.currentAmountTxt.innerHTML = currentAmount;
+        _appConfig.currentAmountTxt.innerHTML = formatMoney(currentAmount);
     }
 
     function getCurrentAmount() {
-        return "80,00";
+        return 80.00;
     }
 
     function setupCurrentExpenses() {
         var currentExpenses = getCurrentExpenses();
-        _appConfig.currentExpensesTxt.innerHTML = currentExpenses;
+        _appConfig.currentExpensesTxt.innerHTML = formatMoney(currentExpenses);
     }
 
     function getCurrentExpenses() {
-        return "-20,00";
+        return -20.00;
     }
 
     function setupCurrentIncomes() {
         var currentIncomes = getCurrentIncomes();
-        _appConfig.currentIncomesTxt.innerHTML = currentIncomes;
+        _appConfig.currentIncomesTxt.innerHTML = formatMoney(currentIncomes);
     }
 
     function getCurrentIncomes() {
-        return "100,00"
+        return 100.00;
     }
 
     this.setup = function() {
