@@ -1,4 +1,8 @@
-#recent-movements {
+#latest-movements {
     text-align: center;
     width: 100%;
+}
+
+#latest-movements tr td {
+    width: 33%;
 }
