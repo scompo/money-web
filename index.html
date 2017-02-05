@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>money-web</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <h1>money-web</h1>
+    <h2>Operations</h2>
+    <h3>Add new transaction</h3>
+    <form>
+        <fieldset>
+            <legend>New transaction details</legend>
+            <label for="date">Date</label>
+            <input type="datetime" name="date" value="" placeholder="05/01/2017">
+            <label for="value">Value (&euro;) </label>
+            <input id="value" type="text" name="value" placeholder="0,00">
+            <label for="description">Description</label>
+            <input type="text" name="description" value="" placeholder="Write something">
+            <input type="submit" name="submit" value="Send">
+        </fieldset>
+    </form>
+    <h2>Recent stuff</h2>
+    <h3>Resume</h3>
+    <ul>
+        <li>Current (&euro;): 80,00</li>
+        <li>Expenses (&euro;): -20,00</li>
+        <li>Incomes (&euro;): 100,00</li>
+    </ul>
+    <h3>Last movements</h3>
+    <table id="recent-movements">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount (&euro;)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>05/01/2017</td>
+                <td>Stuff bought 1</td>
+                <td>-10,00</td>
+            </tr>
+            <tr>
+                <td>05/01/2017</td>
+                <td>Stuff bought 2</td>
+                <td>-5,00</td>
+            </tr>
+            <tr>
+                <td>05/01/2017</td>
+                <td>Stuff bought 3</td>
+                <td>-5,00</td>
+            </tr>
+            <tr>
+                <td>05/01/2017</td>
+                <td>Stuff gained</td>
+                <td>100,00</td>
+            </tr>
+        </tbody>
+    </table>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
