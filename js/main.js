@@ -18,12 +18,12 @@ function MockedService() {
         {
             date: new Date(2017, 01, 05, 10, 45, 0, 0),
             description: "Bought stuff",
-            amount: -5
+            amount: -4.75
         },
         {
             date: new Date(2017, 01, 05, 10, 50, 0, 0),
             description: "Bought other stuff",
-            amount: -5
+            amount: -5.25
         },
         {
             date: new Date(2017, 01, 05, 11, 0, 0, 0),
