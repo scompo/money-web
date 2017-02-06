@@ -137,7 +137,8 @@ function domLoaded(event) {
         currentIncomesTxt: document.getElementById("current-incomes-txt"),
         insertDateTxt: document.getElementById("date-txt"),
         insertAmountTxt: document.getElementById("amount-txt"),
-        insertDescriptionTxt: document.getElementById("description-txt")
+        insertDescriptionTxt: document.getElementById("description-txt"),
+        insertAddBtn: document.getElementById("insert-btn")
     };
     application = new Application(appConfig);
     application.setup();
