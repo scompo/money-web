@@ -134,7 +134,10 @@ function domLoaded(event) {
         latestMovementsTbl: document.getElementById("latest-movements"),
         currentAmountTxt: document.getElementById("current-amount-txt"),
         currentExpensesTxt: document.getElementById("current-expenses-txt"),
-        currentIncomesTxt: document.getElementById("current-incomes-txt")
+        currentIncomesTxt: document.getElementById("current-incomes-txt"),
+        insertDateTxt: document.getElementById("date-txt"),
+        insertAmountTxt: document.getElementById("amount-txt"),
+        insertDescriptionTxt: document.getElementById("description-txt")
     };
     application = new Application(appConfig);
     application.setup();
