@@ -1,44 +1,61 @@
 document.addEventListener("DOMContentLoaded", domLoaded);
 
-var formatMoney = function(number) {
+var moneyToString = function(number) {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(number)
 }
 
+var stringToMoney = function(str) {
+    return Number(str.replace(",", "."));
+}
+
+var dateToString = function(dt) {
+    return moment(dt).format("DD/MM/YYYY HH:mm");
+}
+
+var stringToDate = function(str) {
+    return moment(str, "DD/MM/YYYY HH:mm");
+}
+
 var movementByDateDesc = function(a, b) {
-    return b.date - a.date;
+    if (a.date.isBefore(b.date)) {
+        return 1;
+    } else if (a.date.isAfter(b.date)) {
+        return -1;
+    }
+    return 0;
 }
 
 function MockedService() {
 
     var _movements = [{
-            date: new Date(2017, 01, 05, 10, 30, 0, 0),
+            date: stringToDate("05/01/2017 10:30"),
             description: "Got money!",
-            amount: 100
+            amount: stringToMoney("100,00")
         },
         {
-            date: new Date(2017, 01, 05, 10, 45, 0, 0),
+            date: stringToDate("05/01/2017 10:45"),
             description: "Bought stuff",
-            amount: -4.75
+            amount: stringToMoney("-4,75")
         },
         {
-            date: new Date(2017, 01, 05, 10, 50, 0, 0),
+            date: stringToDate("05/01/2017 11:50"),
             description: "Bought other stuff",
-            amount: -5.25
+            amount: stringToMoney("-5,25")
         },
         {
-            date: new Date(2017, 01, 05, 11, 0, 0, 0),
+            date: stringToDate("05/01/2017 11:00"),
             description: "Bought some more stuff",
-            amount: -10
+            amount: stringToMoney("-10")
         },
         {
-            date: new Date(2017, 01, 04, 10, 0, 0, 0),
+            date: stringToDate("04/01/2017 10:00"),
             description: "I'm out of money but I buy stuff",
-            amount: -10
+            amount: stringToMoney("-10")
         },
         {
-            date: new Date(2017, 01, 04, 15, 0, 0, 0),
+            date: stringToDate("04/01/2017 15:00"),
             description: "Need some more money to buy stuff",
-            amount: -10
+            amount: stringToMoney("-20")
         }
     ];
 
@@ -78,6 +95,10 @@ function MockedService() {
         }
         return incs;
     }
+
+    this.insertNew = function(mvm) {
+        _movements.push(mvm);
+    }
 }
 
 function Application(appConfig) {
@@ -90,30 +111,63 @@ function Application(appConfig) {
     function setupLatestMovements() {
         latestMovements = _service.loadLatestMovements(_lastMovementNumber);
         latestMovements.sort(movementByDateDesc);
+        _appConfig.latestMovementsTbl.tBodies[0].remove();
+        _appConfig.latestMovementsTbl.appendChild(document.createElement('tbody'));
         latestMovements.forEach(function(value) {
             var row = _appConfig.latestMovementsTbl.tBodies[0].insertRow();
             var c1 = row.insertCell(0);
             var c2 = row.insertCell(1);
             var c3 = row.insertCell(2);
-            c1.innerHTML = value.date;
+            c1.innerHTML = dateToString(value.date);
             c2.innerHTML = value.description;
-            c3.innerHTML = formatMoney(value.amount);
+            c3.innerHTML = moneyToString(value.amount);
         });
     }
 
     function setupCurrentAmount() {
         var currentAmount = _service.getCurrentAmount();
-        _appConfig.currentAmountTxt.innerHTML = formatMoney(currentAmount);
+        _appConfig.currentAmountTxt.innerHTML = moneyToString(currentAmount);
     }
 
     function setupCurrentExpenses() {
         var currentExpenses = _service.getCurrentExpenses();
-        _appConfig.currentExpensesTxt.innerHTML = formatMoney(currentExpenses);
+        _appConfig.currentExpensesTxt.innerHTML = moneyToString(currentExpenses);
     }
 
     function setupCurrentIncomes() {
         var currentIncomes = _service.getCurrentIncomes();
-        _appConfig.currentIncomesTxt.innerHTML = formatMoney(currentIncomes);
+        _appConfig.currentIncomesTxt.innerHTML = moneyToString(currentIncomes);
+    }
+
+    function setupInsertModule() {
+        _appConfig.insertAddBtn.addEventListener("click", insertNewMovement);
+        setupInsertFields();
+    }
+
+    function setupInsertFields() {
+        _appConfig.insertDateTxt.value = "";
+        _appConfig.insertDescriptionTxt.value = "";
+        _appConfig.insertAmountTxt.value = "";
+    }
+
+    var insertNewMovement = function(e) {
+        e.preventDefault();
+        var dateToInsert = stringToDate(_appConfig.insertDateTxt.value);
+        var descriptionToInsert = _appConfig.insertDescriptionTxt.value;
+        var amountToInsert = stringToMoney(_appConfig.insertAmountTxt.value);
+        var movementToInsert = {
+            date: dateToInsert,
+            description: descriptionToInsert,
+            amount: amountToInsert
+
+        };
+        _service.insertNew(movementToInsert);
+
+        setupLatestMovements();
+        setupCurrentAmount();
+        setupCurrentExpenses();
+        setupCurrentIncomes();
+        setupInsertFields();
     }
 
     this.setup = function() {
@@ -122,6 +176,7 @@ function Application(appConfig) {
         setupCurrentAmount();
         setupCurrentExpenses();
         setupCurrentIncomes();
+        setupInsertModule();
     };
 }
 
