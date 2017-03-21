@@ -1,4 +1,4 @@
-function CurrentAmountModule(cfg) {
+function MoneyField(cfg) {
 
     var _cfg = cfg;
 

@@ -14,7 +14,7 @@ function Application(appCfg) {
         ui: appCfg.ui.amount
     };
 
-    var _currentAmountModule = new CurrentAmountModule(currentAmountCfg);
+    var _currentAmountField = new MoneyField(currentAmountCfg);
 
     var currentExpensesCfg = {
         callbacks: {
@@ -25,7 +25,7 @@ function Application(appCfg) {
         ui: appCfg.ui.expenses
     };
 
-    var _currentExpensesModule = new CurrentExpensesModule(currentExpensesCfg);
+    var _currentExpensesField = new MoneyField(currentExpensesCfg);
 
     var currentIncomesCfg = {
         callbacks: {
@@ -36,7 +36,7 @@ function Application(appCfg) {
         ui: appCfg.ui.incomes
     };
 
-    var _currentIncomesModule = new CurrentIncomesModule(currentIncomesCfg);
+    var _currentIncomesField = new MoneyField(currentIncomesCfg);
 
     var latestMovementsCfg = {
         callbacks: {
@@ -56,9 +56,9 @@ function Application(appCfg) {
             },
             afterSave: function() {
                 _latestMovementsModule.refresh();
-                _currentAmountModule.refresh();
-                _currentExpensesModule.refresh();
-                _currentIncomesModule.refresh();
+                _currentAmountField.refresh();
+                _currentExpensesField.refresh();
+                _currentIncomesField.refresh();
             }
         },
         ui: appCfg.ui.insert
