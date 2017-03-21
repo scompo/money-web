@@ -9,6 +9,10 @@ function Table(cfg) {
         _elements.push(e);
     }
 
+    this.removeElements = function() {
+        _elements = [];
+    }
+
     var drawHeader = function() {
         var header = tbl.createTHead();
         var headerRow = header.insertRow(0);

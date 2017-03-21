@@ -1,20 +1,31 @@
 function LatestMovementsModule(cfg) {
 
     var _cfg = cfg;
+    var tblCfg = {
+        table: _cfg.ui.table,
+        rowMapper: function(i, e) {
+            switch (i) {
+                case 0:
+                    return dateToString(e.date);
+                case 1:
+                    return e.description;
+                case 2:
+                    return moneyToString(e.amount)
+                default:
+                    return '';
+            }
+        },
+        header: ['Date', 'Description', 'Amount']
+    };
+
+    var tbl = new Table(tblCfg);
 
     this.draw = function(latestMovements) {
-        var table = _cfg.ui.table;
-        table.tBodies[0].remove();
-        table.appendChild(document.createElement('tbody'));
-        latestMovements.forEach(function(value) {
-            var row = table.tBodies[0].insertRow();
-            var c1 = row.insertCell(0);
-            var c2 = row.insertCell(1);
-            var c3 = row.insertCell(2);
-            c1.innerHTML = dateToString(value.date);
-            c2.innerHTML = value.description;
-            c3.innerHTML = moneyToString(value.amount);
+        tbl.removeElements();
+        latestMovements.forEach(function(e) {
+            tbl.addElement(e);
         });
+        tbl.draw();
     }
 
     this.refresh = function() {

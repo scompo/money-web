@@ -71,4 +71,26 @@ function domLoaded(event) {
         assertEqual('b2', tbl.rows[2].cells[1].innerHTML);
     });
 
+    unitTest('table.removeElements() should remove all elements', function(t) {
+        var tbl = t.fixture.appendChild(document.createElement('table'));
+        var tblCfg = {
+            rowMapper: function(i, e) {
+                return e[i];
+            },
+            table: tbl,
+            header: ['first', 'second'],
+        };
+        var myTable = new Table(tblCfg);
+        myTable.addElement(['a1', 'a2']);
+        myTable.addElement(['b1', 'b2']);
+        myTable.draw();
+        myTable.removeElements();
+        myTable.draw();
+
+        assertEqual(1, tbl.tBodies.length);
+        assertEqual(1, tbl.rows.length);
+        assertEqual('first', tbl.rows[0].cells[0].innerHTML);
+        assertEqual('second', tbl.rows[0].cells[1].innerHTML);
+    });
+
 }
