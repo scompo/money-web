@@ -1,9 +1,9 @@
 function LatestMovementsModule(cfg) {
 
-    this._cfg = cfg;
+    var _cfg = cfg;
 
     this.draw = function(latestMovements) {
-        var table = this._cfg.ui.table;
+        var table = _cfg.ui.table;
         table.tBodies[0].remove();
         table.appendChild(document.createElement('tbody'));
         latestMovements.forEach(function(value) {
@@ -18,7 +18,7 @@ function LatestMovementsModule(cfg) {
     }
 
     this.refresh = function() {
-        var latestMovements = cfg.callbacks.get();
+        var latestMovements = _cfg.callbacks.get();
         this.draw(latestMovements);
     }
 
