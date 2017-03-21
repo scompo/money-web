@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", domLoaded);
 
-function assert(expected, actual) {
+function assertEqual(expected, actual) {
     if (expected != actual) {
         throw 'expected: "' + expected + '" but found "' + actual + '"';
     }
@@ -39,7 +39,15 @@ function domLoaded(event) {
         }
     }
 
-    unitTest('test table', function(t) {
+    unitTest('this should fail', function(t) {
+        assertEqual(true, false);
+    });
+
+    unitTest('this should pass', function(t) {
+        assertEqual(true, true);
+    });
+
+    unitTest('table.addElement() should add an element', function(t) {
         var tbl = t.fixture.appendChild(document.createElement('table'));
         var tblCfg = {
             rowMapper: function(i, e) {
@@ -53,22 +61,14 @@ function domLoaded(event) {
         myTable.addElement(['b1', 'b2']);
         myTable.draw();
 
-        assert(1, tbl.tBodies.length);
-        assert(3, tbl.rows.length);
-        assert('first', tbl.rows[0].cells[0].innerHTML);
-        assert('second', tbl.rows[0].cells[1].innerHTML);
-        assert('a1', tbl.rows[1].cells[0].innerHTML);
-        assert('a2', tbl.rows[1].cells[1].innerHTML);
-        assert('b1', tbl.rows[2].cells[0].innerHTML);
-        assert('b2', tbl.rows[2].cells[1].innerHTML);
-    });
-
-    unitTest('test that fails', function(t) {
-        assert(true, false);
-    });
-
-    unitTest('test that passes', function(t) {
-        assert(true, true);
+        assertEqual(1, tbl.tBodies.length);
+        assertEqual(3, tbl.rows.length);
+        assertEqual('first', tbl.rows[0].cells[0].innerHTML);
+        assertEqual('second', tbl.rows[0].cells[1].innerHTML);
+        assertEqual('a1', tbl.rows[1].cells[0].innerHTML);
+        assertEqual('a2', tbl.rows[1].cells[1].innerHTML);
+        assertEqual('b1', tbl.rows[2].cells[0].innerHTML);
+        assertEqual('b2', tbl.rows[2].cells[1].innerHTML);
     });
 
 }
