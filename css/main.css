@@ -1,8 +1,4 @@
-#latest-movements {
+table {
     text-align: center;
     width: 100%;
-}
-
-#latest-movements tr td {
-    width: 33%;
 }
